@@ -85,11 +85,11 @@ class Configuration implements ConfigurationInterface
                 ->ifTrue(function ($v) {
                     return is_array($v)
                         && !array_key_exists('connections', $v) && !array_key_exists('connection', $v)
-                        && count($v) !== count(array_diff(array_keys($v), ['driver', 'host', 'port', 'database', 'username', 'password', 'charset', 'collation', 'prefix']));
+                        && count($v) !== count(array_diff(array_keys($v), ['driver', 'host', 'port', 'database', 'username', 'password', 'charset', 'collation', 'prefix','read']));
                 })
                 ->then(function ($v) {
                     // Key that should be rewritten to the connection config
-                    $includedKeys = ['driver', 'host', 'port', 'database', 'username', 'password', 'charset', 'collation', 'prefix'];
+                    $includedKeys = ['driver', 'host', 'port', 'database', 'username', 'password', 'charset', 'collation', 'prefix','read','sticky'];
                     $connection = [];
                     foreach ($v as $key => $value) {
                         if (in_array($key, $includedKeys)) {
@@ -138,11 +138,19 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('host')->defaultValue('localhost')->end()
                             ->scalarNode('port')->defaultValue(null)->end()
                             ->scalarNode('database')->isRequired()->end()
+                            ->arrayNode('read')
+                                ->children()
+                                    ->arrayNode('host')
+                                        ->scalarPrototype()->end()
+                                    ->end()
+                                ->end()
+                            ->end()
                             ->scalarNode('username')->defaultValue('root')->end()
                             ->scalarNode('password')->defaultValue('')->end()
                             ->scalarNode('charset')->defaultValue('utf8')->end()
                             ->scalarNode('collation')->defaultValue('utf8_unicode_ci')->end()
                             ->scalarNode('prefix')->defaultValue('')->end()
+                            ->booleanNode('sticky')->defaultFalse()->end()
                         ->end()
                     ->end()
                 ->end() // connections

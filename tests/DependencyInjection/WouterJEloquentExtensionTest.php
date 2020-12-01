@@ -89,7 +89,8 @@ abstract class WouterJEloquentExtensionTest extends TestCase
                 'password' => null,
                 'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
-                'prefix' => null
+                'prefix' => null,
+                'sticky' => false,
             ], 'default'],
             [[
                 'driver' => 'sqlite',
@@ -101,6 +102,7 @@ abstract class WouterJEloquentExtensionTest extends TestCase
                 'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix' => 'symfo_',
+                'sticky' => false,
             ], 'connection_1'],
         ], $connectionCalls);
     }
